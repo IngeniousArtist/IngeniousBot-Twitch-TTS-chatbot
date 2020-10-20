@@ -1,0 +1,17 @@
+# Rename this file to .env
+# Configuration and secrets go here
+
+#Get this from https://twitchapps.com/tmi/
+TMI_TOKEN= "oauth:_____"
+
+#Get this from https://dev.twitch.tv/console/apps
+CLIENT_ID= "_____"
+
+#Bot account username on twitch
+BOT_NICK= "ingeniousb0t"
+
+#Prefix for the chat commands
+BOT_PREFIX= "!"
+
+#Where you want the bot to be at
+CHANNEL= "ingeniousartist"
