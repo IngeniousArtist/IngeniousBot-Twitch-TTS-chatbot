@@ -1,9 +1,12 @@
 ## IngeniousBot: The text to speech Twitch Chatbot you needed!
 
+![Demo](https://github.com/IngeniousArtist/IngeniousBot-Twitch-TTS-chatbot/blob/main/IngeniousBot.png)
+
 >**This Bot has been built with a base from [Barebones Twitch Bot](https://github.com/NinjaBunny9000/barebones-twitch-bot) by @NinjaBunny9000.**
 >**Big thanks to her, do check her out: [NinjaBunny9000](https://github.com/NinjaBunny9000) - _Author, Project Manager_ - [Twitch](https://twitch.tv/ninjabunny9000) //  [Twitter](https://twitter.com/ninjabunny9000)**
 
 If you liked using this bot, give it a ✨ and follow me on - [Twitch](https://www.twitch.tv/ingeniousartist) // [Twitter](https://twitter.com/ShahriyerShuvo)
+Join our [Discord!](https://discord.gg/gmkEtYn) for some fun times.
 
 ## Features
 - Sends an introduction message and a goodbye message
@@ -40,7 +43,7 @@ This executes when the bot comes online, and will print out to the console.
 ```python
 @bot.event
 async def event_ready():
-    #Runs when bot connects to channel
+    # Runs when bot connects to channel
     print(f"{config('BOT_NICK')} is online! at http://twitch.tv/{config('CHANNEL')}")
     ws = bot._ws  # this is only needed to send messages within event_ready
     await ws.send_privmsg(config('CHANNEL'), f"/me guess who's back!") #Sends intro message
@@ -54,7 +57,7 @@ This function executes once per event (or message) sent. You can make it handle 
 async def event_message(message):
     # Prints chat in terminal
     print(f"{ctx.author.name}: {ctx.content}")
-    #Handles commands
+    # Handles commands
     await bot.handle_commands(message)
 ```
 
