@@ -1,4 +1,4 @@
-## IngeniousBot: The Text to speech Twitch Chatbot you needed!
+## IngeniousBot: The text to speech Twitch Chatbot you needed!
 
 >**This Bot has been built with a base from [Barebones Twitch Bot](https://github.com/NinjaBunny9000/barebones-twitch-bot) by @NinjaBunny9000.**
 >**Big thanks to her, do check her out: [NinjaBunny9000](https://github.com/NinjaBunny9000) - _Author, Project Manager_ - [Twitch](https://twitch.tv/ninjabunny9000) //  [Twitter](https://twitter.com/ninjabunny9000)**
