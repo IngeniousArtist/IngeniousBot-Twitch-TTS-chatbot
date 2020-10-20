@@ -12,6 +12,7 @@ Join our [Discord!](https://discord.gg/gmkEtYn) for some fun times.
 - Sends an introduction message and a goodbye message
 - Responds to basic greetings, PogChamps and KEKWs
 - Does Text-to-Speech(TTS) on highlighted messages
+- Thanks subscribers for subbing
 - Calls you out on Channel point rewards
 - Has a self-destruct kill command for the streamer
 - Spams DJ Khaled quotes every 10 minutes in chat
