@@ -4,14 +4,14 @@ from twitchio.ext import commands
 import time
 import sys
 import random
-from sfx import getsfx
+from channel_points import redeem
 from datetime import datetime
 import os
 
 #Global vars
 timer = time.time()
 start_time = time.time()
-sound = getsfx()
+redeem = redeem()
 now = datetime.now()
 datedmy = now.strftime("%d-%m-%Y")
 timehms = now.strftime("%H-%M-%S")
@@ -40,6 +40,14 @@ async def event_message(ctx):
     global timer
     global datedmy
     global timehms
+    global redeem
+
+    #timeout command
+    if "custom-reward-id=60785c5c-2e61-4525-a458-888242be5767" in ctx.raw_data:
+        await ctx.channel.timeout(ctx.content, 300, f"{ctx.author.name} timed you out")
+    
+    # Channel Reward Points and Sound Effects, you need to require viewers to enter text to get the data
+    redeem.points(ctx.raw_data)
 
     # make sure the bot ignores itself and the streamer
     if ctx.author.name.lower() == config('BOT_NICK').lower():
@@ -62,7 +70,7 @@ async def event_message(ctx):
 
     #Logs chat in text file
     logger = open(f"chatlogs/log {datedmy} {timehms}.txt", "a")
-    logger.write(datetime.now().strftime("%H:%M:%S") + f" {ctx.author.name}: {ctx.content}\n")
+    logger.write(ctx.timestamp.strftime("%H:%M:%S") + f" {ctx.author.name}: {ctx.content}\n")
     logger.close()
 
     #Welcomes new chatters, exludes you
@@ -87,16 +95,6 @@ async def event_message(ctx):
     elif 'Pog' in ctx.content:
         await ctx.channel.send("Pog Pog PogU")
     
-
-@bot.event
-async def event_raw_data(data):
-    # Channel Reward Points and Sound Effects, you need to require viewers to enter text to get the data
-    global sound
-    sound.sfx(data)
-
-    #For testing purposes, print the raw data
-    #print(data)
-
 
 # BOT COMMANDS
 @bot.command(name='test')
@@ -125,6 +123,9 @@ async def uptime(ctx):
     uptime = time.strftime('%H:%M:%S', time.gmtime(time.time()-start_time))
     await ctx.send(f"{config('CHANNEL')}'s stream uptime is currently {uptime}")
 
+@bot.command(name='mark')
+async def mark(ctx):
+    await ctx.send('/mark good shit')
 
 #Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
 @bot.command(name='kill')
