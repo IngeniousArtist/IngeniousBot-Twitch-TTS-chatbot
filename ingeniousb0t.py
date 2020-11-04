@@ -9,6 +9,7 @@ from datetime import datetime
 import os
 
 #Global vars
+timer = time.time()
 start_time = time.time()
 sound = getsfx()
 now = datetime.now()
@@ -36,7 +37,7 @@ async def event_ready():
 async def event_message(ctx):
     #Runs every time a message is sent in chat.
     global chatters
-    global start_time
+    global timer
     global datedmy
     global timehms
 
@@ -50,11 +51,11 @@ async def event_message(ctx):
     # Timed Commands
     current_time = time.time()
     # Sends a DJ Khaled Quote every 10 minutes.
-    if current_time-start_time>600:
+    if current_time-timer>600:
         lines = open('djkhaled.txt').read().splitlines()
         keytosuccess = random.choice(lines)
         await ctx.channel.send(keytosuccess)
-        start_time = time.time()
+        timer = time.time()
 
     # Prints chat in terminal
     print(f"{ctx.author.name}: {ctx.content}")
@@ -117,6 +118,12 @@ async def yt(ctx):
 @bot.command(name='games')
 async def games(ctx):
     await ctx.send('CSGO • Sea of Theives • Apex Legends • Phasmophobia • Among Us • Minecraft • Genshin Impact')
+
+@bot.command(name='uptime')
+async def uptime(ctx):
+    global start_time
+    uptime = time.strftime('%H:%M:%S', time.gmtime(time.time()-start_time))
+    await ctx.send(f"{config('CHANNEL')}'s stream uptime is currently {uptime}")
 
 
 #Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
