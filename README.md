@@ -9,8 +9,9 @@ If you liked using this bot, give it a ✨ and follow me on - [Twitch](https://w
 Join our [Discord!](https://discord.gg/gmkEtYn) for some fun times.
 
 ## Features
-- Sends an introduction message and a goodbye message
-- Responds to basic greetings, PogChamps and KEKWs
+- Logs all chat messages with timestamp
+- Sends an introduction message and greets new chatters
+- Responds to PogChamps and KEKWs
 - Does Text-to-Speech(TTS) on highlighted messages
 - Thanks subscribers for subbing
 - Calls you out on Channel point rewards
