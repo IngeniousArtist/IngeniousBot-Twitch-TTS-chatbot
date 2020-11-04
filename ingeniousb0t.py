@@ -5,10 +5,16 @@ import time
 import sys
 import random
 from sfx import getsfx
+from datetime import datetime
+import os
 
 #Global vars
 start_time = time.time()
 sound = getsfx()
+now = datetime.now()
+datedmy = now.strftime("%d-%m-%Y")
+timehms = now.strftime("%H-%M-%S")
+chatters = []
 
 # sets up the bot from env
 bot = commands.Bot(
@@ -26,12 +32,13 @@ async def event_ready():
     ws = bot._ws  # this is only needed to send messages within event_ready
     await ws.send_privmsg(config('CHANNEL'), f"/me guess who's back!") #Sends intro message
 
-
 @bot.event
 async def event_message(ctx):
     #Runs every time a message is sent in chat.
-    
+    global chatters
     global start_time
+    global datedmy
+    global timehms
 
     # make sure the bot ignores itself and the streamer
     if ctx.author.name.lower() == config('BOT_NICK').lower():
@@ -52,17 +59,23 @@ async def event_message(ctx):
     # Prints chat in terminal
     print(f"{ctx.author.name}: {ctx.content}")
 
+    #Logs chat in text file
+    logger = open(f"chatlogs/log {datedmy} {timehms}.txt", "a")
+    logger.write(datetime.now().strftime("%H:%M:%S") + f" {ctx.author.name}: {ctx.content}\n")
+    logger.close()
+
+    #Welcomes new chatters, exludes you
+    if ctx.author.name.lower() != config('CHANNEL') and str(ctx.author.name) not in chatters:
+        lines = open('greetings.txt').read().splitlines()
+        greetings = random.choice(lines)
+        greetings = greetings.split("ANON")
+        await  ctx.channel.send(greetings[0]+ "@" + ctx.author.name+greetings[1])
+        chatters.append(ctx.author.name) #Adds new chatter to list of chatters
+        print("current chatters: ", chatters)
+
     # Recognizes keywords and sends a reply in chat
     # Some have space so that other words do not get detected
-    if 'hello' in ctx.content.lower():
-        await ctx.channel.send(f"yo, @{ctx.author.name} long time no see! Kappa")
-    elif 'hey ' in ctx.content.lower():
-        await ctx.channel.send(f"Hey man, how's it going @{ctx.author.name}? SeemsGood")
-    elif 'yo ' in ctx.content.lower():
-        await ctx.channel.send(f"Wassup Wassup @{ctx.author.name}! PogChamp")
-    elif 'hi ' in ctx.content.lower():
-        await ctx.channel.send(f"Well hello there @{ctx.author.name}! Kappa")
-    elif 'PogChamp' in ctx.content:
+    if 'PogChamp' in ctx.content:
         await ctx.channel.send("PogChamp PogChamp PogChamp PogChamp PogChamp")
     elif 'KEKW' in ctx.content:
         await ctx.channel.send("KEKW KEKW KEKW")
@@ -85,7 +98,6 @@ async def event_raw_data(data):
 
 
 # BOT COMMANDS
-
 @bot.command(name='test')
 async def test(ctx):
     await ctx.send('test passed!')
@@ -104,7 +116,7 @@ async def yt(ctx):
 
 @bot.command(name='games')
 async def games(ctx):
-    await ctx.send('CSGO • Sea of Theives • Apex Legends • The Escapists 2 • Among Us • Rogue Company • Runescape • Minecraft • Muse Dash')
+    await ctx.send('CSGO • Sea of Theives • Apex Legends • Phasmophobia • Among Us • Minecraft • Genshin Impact')
 
 
 #Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
@@ -118,4 +130,5 @@ async def kill(ctx):
         await ctx.send("You aren't supposed to be doing that lol.")
 
 if __name__ == "__main__":
+    if not os.path.exists('chatlogs'): os.makedirs('chatlogs')
     bot.run()
