@@ -12,12 +12,14 @@ Join our [Discord!](https://discord.gg/gmkEtYn) for some fun times.
 - Logs all chat messages with timestamp
 - Sends an introduction message and greets new chatters
 - Responds to PogChamps and KEKWs
-- Does Text-to-Speech(TTS) on highlighted messages
+- Does native Text-to-Speech(TTS) on highlighted messages (Windows)
 - Thanks subscribers for subbing
+- Can timeout users
+- Puts stream markers if you don't have time to clip
 - Calls you out on Channel point rewards
 - Has a self-destruct kill command for the streamer
 - Spams DJ Khaled quotes every 10 minutes in chat
-- Speaks in Google Translate and fluent Dothraki (jk)
+- Calculates stream uptime instantly
 
 ## Pre-installing
 - Use a secondary account for the bot. It is much easier that way.
