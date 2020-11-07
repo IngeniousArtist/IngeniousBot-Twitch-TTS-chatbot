@@ -1,14 +1,14 @@
-#All your imports
+# All your imports
 from decouple import config
 from twitchio.ext import commands
 import time
 import sys
 import random
-from channel_points import redeem
+from speech import redeem
 from datetime import datetime
 import os
 
-#Global vars
+# Global vars
 timer = time.time()
 start_time = time.time()
 redeem = redeem()
@@ -17,7 +17,7 @@ datedmy = now.strftime("%d-%m-%Y")
 timehms = now.strftime("%H-%M-%S")
 chatters = []
 
-# sets up the bot from env
+# Sets up the bot from env
 bot = commands.Bot(
     irc_token= config('TMI_TOKEN'),
     client_id= config('CLIENT_ID'),
@@ -28,21 +28,39 @@ bot = commands.Bot(
 
 @bot.event
 async def event_ready():
-    #Runs when bot connects to channel
+    # Runs when bot connects to channel
     print(f"{config('BOT_NICK')} is online! at http://twitch.tv/{config('CHANNEL')}")
     ws = bot._ws  # this is only needed to send messages within event_ready
-    await ws.send_privmsg(config('CHANNEL'), f"/me guess who's back!") #Sends intro message
+    await ws.send_privmsg(config('CHANNEL'), f"/me guess who's back!") # Sends intro message
 
 @bot.event
 async def event_message(ctx):
-    #Runs every time a message is sent in chat.
+    # Runs every time a message is sent in chat.
     global chatters
     global timer
     global datedmy
     global timehms
     global redeem
+    
+    # Prints chat in terminal
+    print(f"{ctx.author.name}: {ctx.content}")
 
-    #timeout command
+    # Logs chat in text file
+    logger = open(f"chatlogs/log {datedmy} {timehms}.txt", "a")
+    logger.write(ctx.timestamp.strftime("%H:%M:%S") + f" {ctx.author.name}: {ctx.content}\n")
+    
+    # Anti-Spam
+    spam = open('spam.txt').read().splitlines()
+    if ctx.content in spam:
+        await ctx.channel.ban(ctx.author.name, "Banned for spamming by ingeniousb0t")
+        redeem.banhammer(ctx.author.name)
+        print("Banned:", ctx.author.name, "\nfor spamming:", ctx.content)
+        logger.write(ctx.timestamp.strftime("%H:%M:%S") + f" BANNED {ctx.author.name} for spamming.\n")
+
+    # Closes logger
+    logger.close()
+
+    # Timeout command
     if "custom-reward-id=60785c5c-2e61-4525-a458-888242be5767" in ctx.raw_data:
         await ctx.channel.timeout(ctx.content, 300, f"{ctx.author.name} timed you out")
     
@@ -53,7 +71,7 @@ async def event_message(ctx):
     if ctx.author.name.lower() == config('BOT_NICK').lower():
         return
 
-    #Handles bot commands
+    # Handles bot commands
     await bot.handle_commands(ctx)
 
     # Timed Commands
@@ -65,21 +83,13 @@ async def event_message(ctx):
         await ctx.channel.send(keytosuccess)
         timer = time.time()
 
-    # Prints chat in terminal
-    print(f"{ctx.author.name}: {ctx.content}")
-
-    #Logs chat in text file
-    logger = open(f"chatlogs/log {datedmy} {timehms}.txt", "a")
-    logger.write(ctx.timestamp.strftime("%H:%M:%S") + f" {ctx.author.name}: {ctx.content}\n")
-    logger.close()
-
-    #Welcomes new chatters, exludes you
+    # Welcomes new chatters, exludes you
     if ctx.author.name.lower() != config('CHANNEL') and str(ctx.author.name) not in chatters:
         lines = open('greetings.txt').read().splitlines()
         greetings = random.choice(lines)
         greetings = greetings.split("ANON")
         await  ctx.channel.send(greetings[0]+ "@" + ctx.author.name+greetings[1])
-        chatters.append(ctx.author.name) #Adds new chatter to list of chatters
+        chatters.append(ctx.author.name) # Adds new chatter to list of chatters
         print("current chatters: ", chatters)
 
     # Recognizes keywords and sends a reply in chat
@@ -88,7 +98,7 @@ async def event_message(ctx):
         await ctx.channel.send("PogChamp PogChamp PogChamp PogChamp PogChamp")
     elif 'KEKW' in ctx.content:
         await ctx.channel.send("KEKW KEKW KEKW")
-    elif 'bruh' in ctx.content.lower():
+    elif 'bruh ' in ctx.content.lower():
         await ctx.channel.send("BRUHHHH PogChamp")
     elif 'lets go' in ctx.content.lower():
         await ctx.channel.send("LETS GOOOOOOOO KomodoHype KomodoHype KomodoHype")
@@ -97,37 +107,45 @@ async def event_message(ctx):
     
 
 # BOT COMMANDS
+
+# Test command
 @bot.command(name='test')
 async def test(ctx):
     await ctx.send('test passed!')
 
+# Discord promo
 @bot.command(name='discord')
 async def discord(ctx):
     await ctx.send('GVNG$HIT at --> https://discord.gg/gmkEtYn')
 
+# Giveaways
 @bot.command(name='giveaway')
 async def giveaway(ctx):
     await ctx.send('No giveaways happening currently!')
 
+# Youtube promo
 @bot.command(name='youtube')
 async def yt(ctx):
     await ctx.send('DEMONETIZE ME - https://www.youtube.com/ingeniousartist')
 
+# Posts current playable games
 @bot.command(name='games')
 async def games(ctx):
     await ctx.send('CSGO • Sea of Theives • Apex Legends • Phasmophobia • Among Us • Minecraft • Genshin Impact')
 
+# Calculates Uptime
 @bot.command(name='uptime')
 async def uptime(ctx):
     global start_time
     uptime = time.strftime('%H:%M:%S', time.gmtime(time.time()-start_time))
     await ctx.send(f"{config('CHANNEL')}'s stream uptime is currently {uptime}")
 
+# Puts a stream marker
 @bot.command(name='mark')
 async def mark(ctx):
     await ctx.send('/mark good shit')
 
-#Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
+# Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
 @bot.command(name='kill')
 async def kill(ctx):
     if ctx.author.name.lower() == config('CHANNEL'):

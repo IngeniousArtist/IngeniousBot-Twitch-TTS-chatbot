@@ -2,6 +2,11 @@ import os
 import win32com.client as wincl
 
 class redeem:
+    def banhammer(self, name):
+        speak = wincl.Dispatch("SAPI.SpVoice")
+        speak.Speak(name + " has been banned for spamming. Goodbye.")
+        return
+
     def points(self,data):
         
         speak = wincl.Dispatch("SAPI.SpVoice")
@@ -84,7 +89,7 @@ class redeem:
                     break
                 i+=1
             
-            timeout = data[name_ind:end_ind] + " has timed out " + data[ind:] + " for 10 minutes"
+            timeout = data[name_ind:end_ind] + " has timed out " + data[ind:] + " for 5 minutes"
             speak.Speak(timeout)
             return
             
