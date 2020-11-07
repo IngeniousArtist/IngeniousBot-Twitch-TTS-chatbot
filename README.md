@@ -9,6 +9,7 @@ If you liked using this bot, give it a ✨ and follow me on - [Twitch](https://w
 Join our [Discord!](https://discord.gg/gmkEtYn) for some fun times.
 
 ## Features
+- Anti Spam (Brings out the hammer)
 - Logs all chat messages with timestamp
 - Sends an introduction message and greets new chatters
 - Responds to PogChamps and KEKWs
