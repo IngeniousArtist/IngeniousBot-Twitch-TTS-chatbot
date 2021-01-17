@@ -116,7 +116,7 @@ async def test(ctx):
 # Discord promo
 @bot.command(name='discord')
 async def discord(ctx):
-    await ctx.send('GVNG$HIT at --> https://discord.gg/gmkEtYn')
+    await ctx.send('GVNG$HIT at --> https://discord.gg/UQjXeh9MRY')
 
 # Giveaways
 @bot.command(name='giveaway')
