@@ -314,6 +314,13 @@ async def bosslore(ctx):
     boss = open('boss.txt').read().splitlines()
     await ctx.send(f"{boss[10]}")
 
+# Clip channel
+@bot.command(name='clip')
+async def clip(ctx):
+    print(ctx.author.id)
+    await bot.create_clip(config('BEARER_TOKEN'), ctx.author.id)
+    #print(clip_url)
+
 # Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
 @bot.command(name='kill')
 async def kill(ctx):

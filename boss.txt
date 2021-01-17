@@ -2,10 +2,10 @@ Name
 MEGALODON
 =========
 HP
-95142
+500
 =========
 DMG
-200
+553
 =========
 Lore
 Megalodon. Everyone calls her Meg. I call her a monster. She once ruled the seven seas. Now she's here to take back what's hers. My stream.
