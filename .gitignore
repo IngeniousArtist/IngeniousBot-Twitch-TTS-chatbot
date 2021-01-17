@@ -1,5 +1,6 @@
 #exclude env file
 *.env
 /chatlogs/*
+/clips/*
 *.pyc
 *.mp3

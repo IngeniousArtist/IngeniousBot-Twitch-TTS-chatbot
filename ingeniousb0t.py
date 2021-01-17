@@ -21,7 +21,7 @@ colors = ['Blue','BlueViolet','CadetBlue','Chocolate','Coral','DodgerBlue','Fire
 # Sets up the bot from env
 bot = commands.Bot(
     irc_token= config('TMI_TOKEN'),
-    client_id= config('CLIENT_ID'),
+    client_id= config('BEARER_ID'),
     nick= config('BOT_NICK'),
     prefix=config('BOT_PREFIX'),
     initial_channels=[config('CHANNEL')]
@@ -43,7 +43,7 @@ async def event_message(ctx):
     global timehms
     global redeem
     global colors
-    
+
     # Prints chat in terminal
     print(f"{ctx.author.name}: {ctx.content}")
 
@@ -317,9 +317,10 @@ async def bosslore(ctx):
 # Clip channel
 @bot.command(name='clip')
 async def clip(ctx):
-    print(ctx.author.id)
-    await bot.create_clip(config('BEARER_TOKEN'), ctx.author.id)
-    #print(clip_url)
+    clip_url = await bot.create_clip(config('BEARER_TOKEN'), config('AUTHOR_ID'))
+    logger = open(f"clips/all clips {datedmy}.txt", "a")
+    logger.write(f" {clip_url}\n")
+    await ctx.send(f"Clip created! {clip_url}")
 
 # Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
 @bot.command(name='kill')
@@ -333,4 +334,5 @@ async def kill(ctx):
 
 if __name__ == "__main__":
     if not os.path.exists('chatlogs'): os.makedirs('chatlogs')
+    if not os.path.exists('clips'): os.makedirs('clips')
     bot.run()
