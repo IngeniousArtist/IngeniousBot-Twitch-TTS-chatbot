@@ -63,9 +63,96 @@ async def event_message(ctx):
     # Closes logger
     logger.close()
 
+    print(ctx.raw_data)
+
     # Timeout command
     if "custom-reward-id=60785c5c-2e61-4525-a458-888242be5767" in ctx.raw_data:
         await ctx.channel.timeout(ctx.content, 300, f"{ctx.author.name} timed you out")
+
+    # BOSS FIGHT QUICK ATTACK
+    if "custom-reward-id=f27cbd6d-36b2-4d95-977c-1c59566bc83d" in ctx.raw_data:
+        boss = open('boss.txt').read().splitlines()
+        prev_dmg = int(boss[7])
+        critical = random.choice([True, False])
+        quick_dmg = 42
+
+        if int(boss[7])>int(boss[4]):
+            await ctx.channel.send("/me The boss is dead! HUZZAH!")
+        else:
+            if critical==True:
+                dmg = quick_dmg*random.randint(1,2)
+                await ctx.channel.send(f"Critical! {ctx.author.name} just hit {boss[1]} with a quick attack and gave {dmg} damage!")
+                boss[7] = str(prev_dmg+dmg)
+                with open('boss.txt', 'w') as filehandle:
+                    for listitem in boss:
+                        filehandle.write('%s\n' % listitem)
+
+            else:
+                dmg = quick_dmg
+                await ctx.channel.send(f"{ctx.author.name} just hit {boss[1]} with a quick attack and gave {dmg} damage!")
+                boss[7] = str(prev_dmg+dmg)
+                with open('boss.txt', 'w') as filehandle:
+                    for listitem in boss:
+                        filehandle.write('%s\n' % listitem)
+
+    # BOSS FIGHT HEAVY ATTACK
+    if "custom-reward-id=792b8863-1997-4f7e-acc6-70341d20da2a" in ctx.raw_data:
+        boss = open('boss.txt').read().splitlines()
+        prev_dmg = int(boss[7])
+        critical = random.choice([True, False])
+        heavy_dmg = 69
+        
+        if int(boss[7])>int(boss[4]):
+            await ctx.channel.send("/me The boss is dead! HUZZAH!")
+        else:
+            if critical==True:
+                dmg = heavy_dmg*random.randint(1,3)
+                await ctx.channel.send(f"Critical! {ctx.author.name} just hit {boss[1]} with a heavy attack and gave {dmg} damage!")
+                boss[7] = str(prev_dmg+dmg)
+                with open('boss.txt', 'w') as filehandle:
+                    for listitem in boss:
+                        filehandle.write('%s\n' % listitem)
+
+            else:
+                dmg = heavy_dmg
+                await ctx.channel.send(f"{ctx.author.name} just hit {boss[1]} with a heavy attack and gave {dmg} damage!")
+                boss[7] = str(prev_dmg+dmg)
+                with open('boss.txt', 'w') as filehandle:
+                    for listitem in boss:
+                        filehandle.write('%s\n' % listitem)
+
+    # BOSS FIGHT ULT ATTACK
+    if "custom-reward-id=0d8d13bc-ea71-4d92-877d-9dc5f5ed8173" in ctx.raw_data:
+        boss = open('boss.txt').read().splitlines()
+        prev_dmg = int(boss[7])
+        critical = random.choice([True, False])
+        ult_dmg = 200
+        
+        if int(boss[7])>int(boss[4]):
+            await ctx.channel.send("/me The boss is dead! HUZZAH!")
+        else:
+            if critical==True:
+                dmg = ult_dmg*random.randint(1,5)
+                await ctx.channel.send(f"Critical! {ctx.author.name} just hit {boss[1]} with a ultimate attack and gave {dmg} damage!")
+                boss[7] = str(prev_dmg+dmg)
+                with open('boss.txt', 'w') as filehandle:
+                    for listitem in boss:
+                        filehandle.write('%s\n' % listitem)
+
+            else:
+                dmg = ult_dmg
+                await ctx.channel.send(f"{ctx.author.name} just hit {boss[1]} with a ultimate attack and gave {dmg} damage!")
+                boss[7] = str(prev_dmg+dmg)
+                with open('boss.txt', 'w') as filehandle:
+                    for listitem in boss:
+                        filehandle.write('%s\n' % listitem)
+
+    # Giveaway entry
+    if "custom-reward-id=67bb4ed4-c686-432f-8f2f-8ba44b3174c4" in ctx.raw_data:
+        giveaway = open('giveaway.txt','a')
+        giveaway.write(f"{ctx.author.name}\n")
+        giveaway.close()
+        await ctx.channel.send(f"Thanks {ctx.author.name}! You just entered the giveaway!")
     
     # Channel Reward Points and Sound Effects, you need to require viewers to enter text to get the data
     redeem.points(ctx.raw_data)
@@ -154,7 +241,78 @@ async def coinflip(ctx):
 # Winning Odds
 @bot.command(name='odds')
 async def odds(ctx):
-    await ctx.send("IngeniousArtist has "+ str(random.randint(0,100)) +"% chance of winning this")
+    await ctx.send(f"{ctx.channel.name} has "+ str(random.randint(0,100)) +"% chance of winning this")
+
+# Airhorn sound effect. Can only be used by streamer.
+@bot.command(name='airhorn')
+async def airhorn(ctx):
+    if ctx.author.name.lower() == config('CHANNEL'):
+        os.system('Airhorn.mp3')
+        await ctx.send("/me LETS GET THIS PARTY STARTED!")
+    else:
+        await ctx.send("You don't have the permission to play this.")
+
+# GUCCI GANG voiceline. Can only be used by streamer.
+@bot.command(name='guccigang')
+async def guccigang(ctx):
+    if ctx.author.name.lower() == config('CHANNEL'):
+        redeem.voicecomm('guccigang')
+        await ctx.send("/me GUCCIGANG GUCCIGANG GUCCIGANG")
+    else:
+        await ctx.send("You don't have the permission to play this.")
+
+# Giveaway Count
+@bot.command(name='giveawaycount')
+async def giveawaycount(ctx):
+    names = open('giveaway.txt').read().splitlines()
+    await ctx.send(f"Total number of tickets entered for the giveaway is {len(names)}!")
+
+# Giveaway my tickets
+@bot.command(name='tickets')
+async def tickets(ctx):
+    names = open('giveaway.txt').read().splitlines()
+    count = names.count(ctx.author.name)
+    await ctx.send(f"{ctx.author.name}, you have entered the giveaway with {count} tickets!")
+
+# Decide Giveaway winner
+@bot.command(name='giveawaywinner')
+async def giveawaywinner(ctx):
+    if ctx.author.name.lower() == config('CHANNEL'):
+        names = open('giveaway.txt').read().splitlines()
+        winner = random.choice(names)
+        await ctx.send(f"/me AND THE WINNER IS *DRUM ROLL* ... {winner}!!!")
+    else:
+        await ctx.send("You don't have the permission to do this.")
+
+# Clears giveaway database
+@bot.command(name='giveawayclear')
+async def giveawayclear(ctx):
+    if ctx.author.name.lower() == config('CHANNEL'):
+        open('giveaway.txt', 'w').close()
+        await ctx.send(f"/me Giveaway over. Redeem tickets now to enter for the next giveaway! Thank you!")
+    else:
+        await ctx.send("You don't have the permission to do this.")
+
+# Boss HP
+@bot.command(name='bosshp')
+async def bosshp(ctx):
+    boss = open('boss.txt').read().splitlines()
+    if int(boss[7])>int(boss[4]):
+        await ctx.send("/me The boss is dead. HUZZAH!")
+    else:
+        await ctx.send(f"{boss[1]} has {int(boss[4])-int(boss[7])}hp left out of {int(boss[4])}")
+
+# Boss Damage
+@bot.command(name='bossdmg')
+async def bossdmg(ctx):
+    boss = open('boss.txt').read().splitlines()
+    await ctx.send(f"We gave {boss[1]} a beating of total {boss[7]}hp. NOW THAT'S A LOTTA DAMAGE!")
+
+# Boss Lore
+@bot.command(name='bosslore')
+async def bosslore(ctx):
+    boss = open('boss.txt').read().splitlines()
+    await ctx.send(f"{boss[10]}")
 
 # Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
 @bot.command(name='kill')

@@ -7,6 +7,13 @@ class redeem:
         speak.Speak(name + " has been banned for spamming. Goodbye.")
         return
 
+    def voicecomm(self, keyword):
+        speak = wincl.Dispatch("SAPI.SpVoice")
+
+        if keyword=="guccigang":
+            speak.Speak("GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG.")
+            return
+
     def points(self,data):
         
         speak = wincl.Dispatch("SAPI.SpVoice")
