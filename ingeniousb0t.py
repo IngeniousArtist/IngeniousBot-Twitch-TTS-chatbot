@@ -16,6 +16,7 @@ now = datetime.now()
 datedmy = now.strftime("%d-%m-%Y")
 timehms = now.strftime("%H-%M-%S")
 chatters = []
+colors = ['Blue','BlueViolet','CadetBlue','Chocolate','Coral','DodgerBlue','FireBrick','GoldenRod','Green','HotPink','OrangeRed','Red','SeaGreen','SpringGreen','YellowGreen']
 
 # Sets up the bot from env
 bot = commands.Bot(
@@ -41,6 +42,7 @@ async def event_message(ctx):
     global datedmy
     global timehms
     global redeem
+    global colors
     
     # Prints chat in terminal
     print(f"{ctx.author.name}: {ctx.content}")
@@ -51,11 +53,12 @@ async def event_message(ctx):
     
     # Anti-Spam
     spam = open('spam.txt').read().splitlines()
-    if ctx.content in spam:
-        await ctx.channel.ban(ctx.author.name, "Banned for spamming by ingeniousb0t")
-        redeem.banhammer(ctx.author.name)
-        print("Banned:", ctx.author.name, "\nfor spamming:", ctx.content)
-        logger.write(ctx.timestamp.strftime("%H:%M:%S") + f" BANNED {ctx.author.name} for spamming.\n")
+    for keyword in spam:
+        if keyword.lower() in ctx.content.lower():
+            await ctx.channel.ban(ctx.author.name, "Banned for spamming by ingeniousb0t")
+            redeem.banhammer(ctx.author.name)
+            print("Banned:", ctx.author.name, "\nfor spamming:", ctx.content)
+            logger.write(ctx.timestamp.strftime("%H:%M:%S") + f" BANNED {ctx.author.name} for spamming.\n")
 
     # Closes logger
     logger.close()
@@ -82,12 +85,15 @@ async def event_message(ctx):
         keytosuccess = random.choice(lines)
         await ctx.channel.send(keytosuccess)
         timer = time.time()
+    #Changes color code for the bot
+    if current_time-timer==300:
+        await ctx.channel.color(random.choice(colors))
 
-    # Welcomes new chatters, exludes you
+    # Welcomes new chatters, exludes you, the streamer
     if ctx.author.name.lower() != config('CHANNEL') and str(ctx.author.name) not in chatters:
         lines = open('greetings.txt').read().splitlines()
         greetings = random.choice(lines)
-        greetings = greetings.split("ANON")
+        greetings = greetings.split("[USERNAME]")
         await  ctx.channel.send(greetings[0]+ "@" + ctx.author.name+greetings[1])
         chatters.append(ctx.author.name) # Adds new chatter to list of chatters
         print("current chatters: ", chatters)
@@ -98,12 +104,12 @@ async def event_message(ctx):
         await ctx.channel.send("PogChamp PogChamp PogChamp PogChamp PogChamp")
     elif 'KEKW' in ctx.content:
         await ctx.channel.send("KEKW KEKW KEKW")
-    elif 'bruh ' in ctx.content.lower():
+    elif 'bruh' in ctx.content.lower():
         await ctx.channel.send("BRUHHHH PogChamp")
     elif 'lets go' in ctx.content.lower():
         await ctx.channel.send("LETS GOOOOOOOO KomodoHype KomodoHype KomodoHype")
     elif 'Pog' in ctx.content:
-        await ctx.channel.send("Pog Pog PogU")
+        await ctx.channel.send("Pog Pog PogChamp")
     
 
 # BOT COMMANDS
@@ -140,10 +146,15 @@ async def uptime(ctx):
     uptime = time.strftime('%H:%M:%S', time.gmtime(time.time()-start_time))
     await ctx.send(f"{config('CHANNEL')}'s stream uptime is currently {uptime}")
 
-# Puts a stream marker
-@bot.command(name='mark')
-async def mark(ctx):
-    await ctx.send('/mark good shit')
+# Coin Flip
+@bot.command(name='coinflip')
+async def coinflip(ctx):
+    await ctx.send(random.choice(['Heads','Tails']))
+
+# Winning Odds
+@bot.command(name='odds')
+async def odds(ctx):
+    await ctx.send("IngeniousArtist has "+ str(random.randint(0,100)) +"% chance of winning this")
 
 # Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
 @bot.command(name='kill')

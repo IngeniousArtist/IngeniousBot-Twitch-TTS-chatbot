@@ -72,12 +72,6 @@ class redeem:
             speak.Speak(custom)
             return
 
-        # Custom reward for Speak in Bangla for 5 minutes, change the reward id to yours
-        elif "custom-reward-id=a9e882c7-f01b-45f2-9705-525a83fd95e7" in data:
-            custom = "You gotta speak in Bangla now for 5 minutes. Can you keep that up atleast?"
-            speak.Speak(custom)
-            return
-
         elif "custom-reward-id=60785c5c-2e61-4525-a458-888242be5767" in data:
             ind = data.index("PRIVMSG #ingeniousartist :")+26
             name_ind = data.index("display-name=")+13

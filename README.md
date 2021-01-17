@@ -16,7 +16,6 @@ Join our [Discord!](https://discord.gg/gmkEtYn) for some fun times.
 - Does native Text-to-Speech(TTS) on highlighted messages (Windows)
 - Thanks subscribers for subbing
 - Can timeout users
-- Puts stream markers if you don't have time to clip
 - Calls you out on Channel point rewards
 - Has a self-destruct kill command for the streamer
 - Spams DJ Khaled quotes every 10 minutes in chat
