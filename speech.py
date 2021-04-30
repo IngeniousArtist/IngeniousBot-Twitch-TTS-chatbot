@@ -13,6 +13,9 @@ class redeem:
         if keyword=="guccigang":
             speak.Speak("GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG GUCCIGANG.")
             return
+        elif keyword=="announcement":
+            speak.Speak("Hey everyone we have an announcement to make!")
+            return
 
     def points(self,data):
         
@@ -93,5 +96,21 @@ class redeem:
             timeout = data[name_ind:end_ind] + " has timed out " + data[ind:] + " for 5 minutes"
             speak.Speak(timeout)
             return
+
+        elif "custom-reward-id=dc1dc3fc-4c06-4062-8c2e-f53305076913" in data:
+            ind = data.index("PRIVMSG #ingeniousartist :")+26
+            name_ind = data.index("display-name=")+13
+            i = name_ind
+            end_ind = 0
+            while True:
+                if data[i]==";":
+                    end_ind = i
+                    break
+                i+=1
+            
+            timeout = data[name_ind:end_ind] + " has requested a song"
+            speak.Speak(timeout)
+            return
+
             
             

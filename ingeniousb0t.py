@@ -7,6 +7,7 @@ import random
 from speech import redeem
 from datetime import datetime
 import os
+import requests
 
 # Global vars
 timer = time.time()
@@ -63,7 +64,7 @@ async def event_message(ctx):
     # Closes logger
     logger.close()
 
-    print(ctx.raw_data)
+    #print(ctx.raw_data)
 
     # Timeout command
     if "custom-reward-id=60785c5c-2e61-4525-a458-888242be5767" in ctx.raw_data:
@@ -197,14 +198,37 @@ async def event_message(ctx):
         await ctx.channel.send("LETS GOOOOOOOO KomodoHype KomodoHype KomodoHype")
     elif 'Pog' in ctx.content:
         await ctx.channel.send("Pog Pog PogChamp")
+    elif 'LUL' in ctx.content:
+        await ctx.channel.send("LUL")
+    elif 'discord' in ctx.content:
+        await ctx.channel.send("Did someone say discord? Join our's here: https://discord.gg/UQjXeh9MRY")
     
-
 # BOT COMMANDS
 
 # Test command
 @bot.command(name='test')
 async def test(ctx):
     await ctx.send('test passed!')
+
+# Color change
+@bot.command(name='color')
+async def color(ctx):
+    await ctx.channel.color(random.choice(colors))
+
+# Specs
+@bot.command(name='specs')
+async def specs(ctx):
+    await ctx.send('Ryzen 5 3600 • RTX 2060 Super • 16GB 3200Mhz RAM • X570 Motherboard')
+
+# Socials
+@bot.command(name='socials')
+async def socials(ctx):
+    await ctx.send('Instagram: https://www.instagram.com/ingeniousartist/ • Discord: https://discord.gg/UQjXeh9MRY •  Youtube: https://www.youtube.com/ingeniousartist')
+
+# Instagram command
+@bot.command(name='instagram')
+async def instagram(ctx):
+    await ctx.send('Spam me on instagram: https://www.instagram.com/ingeniousartist/')
 
 # Discord promo
 @bot.command(name='discord')
@@ -214,7 +238,7 @@ async def discord(ctx):
 # Giveaways
 @bot.command(name='giveaway')
 async def giveaway(ctx):
-    await ctx.send('No giveaways happening currently!')
+    await ctx.send('No giveaways happening currently! Sorry buddy FeelsBadMan')
 
 # Youtube promo
 @bot.command(name='youtube')
@@ -224,7 +248,7 @@ async def yt(ctx):
 # Posts current playable games
 @bot.command(name='games')
 async def games(ctx):
-    await ctx.send('CSGO • Sea of Theives • Apex Legends • Phasmophobia • Among Us • Minecraft • Genshin Impact')
+    await ctx.send('My usual games are: CSGO • Apex Legends • Phasmophobia • Rust')
 
 # Calculates Uptime
 @bot.command(name='uptime')
@@ -260,6 +284,14 @@ async def guccigang(ctx):
         await ctx.send("/me GUCCIGANG GUCCIGANG GUCCIGANG")
     else:
         await ctx.send("You don't have the permission to play this.")
+
+@bot.command(name='announcement')
+async def announcement(ctx):
+    if ctx.author.name.lower() == config('CHANNEL'):
+        redeem.voicecomm('announcement')
+        await ctx.send("/me EVERYBODY LISTEN UP")
+    else:
+        await ctx.send("You don't have the permission to use this.")
 
 # Giveaway Count
 @bot.command(name='giveawaycount')
@@ -321,6 +353,36 @@ async def clip(ctx):
     logger = open(f"clips/all clips {datedmy}.txt", "a")
     logger.write(f" {clip_url}\n")
     await ctx.send(f"Clip created! {clip_url}")
+
+# followage
+@bot.command(name='followage')
+async def followage(ctx):
+    url = f"https://2g.be/twitch/following.php?user={ctx.author.name}&channel={config('CHANNEL')}&format=mwdhms"
+    response = requests.request("GET", url)
+    await ctx.send(response.text)
+
+# Watchtime
+@bot.command(name='watchtime')
+async def watchtime(ctx):
+    await ctx.send(f'{ctx.author.name} has not watched {ctx.channel.name} enough! Get some popcorn and chill a bit more!')    
+
+# Lurk command
+@bot.command(name='lurk')
+async def lurk(ctx):
+    await ctx.send(f'Thanks for the lurk {ctx.author.name}!. Make sure to keep the volume on at least 1% to support the stream fam.')
+
+# Subcount Command
+@bot.command(name='subcount')
+async def subcount(ctx):
+    url = f"https://decapi.me/twitch/subcount?channel={config('CHANNEL')}"
+    response = requests.request("GET", url)
+    await ctx.send(f'@{ctx.author.name}, We currently have {response.text} Subscribers! KomodoHype')
+
+# Time Command
+@bot.command(name='localtime')
+async def localtime(ctx):
+    current_pc_time = datetime.now()
+    await ctx.send(f'Time in Bangladesh is currently {current_pc_time.strftime("%I:%M %p")}')
 
 # Special Kill command to turn off bot. Only allows the streamer to turn it off. Others get a fun reply.
 @bot.command(name='kill')
